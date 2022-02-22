@@ -9,7 +9,14 @@
 {% endblock extra_css %}
 
 {% block content %}
+
+
+<div class="container mt-2"><h2>Ultimas noticias</h2></div>
 <div class="container mt-5">
-{{page.body | richtext}}
+
+{% for n in  noticias %}
+<li style="list-style: none;"><h4>{{n.titulo}}</h4></li>
+<ol>{{n.contenido}}</ol>
+{% endfor %}
 </div>
 {% endblock content %}
