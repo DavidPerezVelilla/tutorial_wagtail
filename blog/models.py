@@ -91,6 +91,23 @@ class BlogPageGalleryImage(Orderable):
         FieldPanel('caption'),
     ]
 
+class ViajesPage(Page):
+    fecha = models.DateField("Fecha Post")
+    intro = models.CharField("Introducción", max_length=250)
+    cuerpo = RichTextField(blank=True)
+   
+    
+
+
+  
+    content_panels = Page.content_panels + [
+     
+        FieldPanel('intro'),
+        FieldPanel('cuerpo', classname="full"),
+        FieldPanel('fecha')
+        
+    ]
+
 @register_snippet
 class BlogCategory(models.Model):
     name = models.CharField(max_length=255)

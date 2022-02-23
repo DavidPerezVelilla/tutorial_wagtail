@@ -15,8 +15,11 @@
 <div class="container mt-5">
 
 {% for n in  noticias %}
-<li style="list-style: none;"><h4>{{n.titulo}}</h4></li>
-<ol>{{n.contenido}}</ol>
+<li style="list-style: none;"><a href="noticias/detalle/{{n.id}}">
+<h4>{{n.titulo}}</h4></a>
+<ol>{{n.pie}}</ol></li>
+
+
 {% endfor %}
 </div>
 {% endblock content %}

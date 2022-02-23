@@ -15,17 +15,22 @@ class HomePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        noticias = noticia.objects.all()[:2]
+        noticias = noticia.objects.all()[:5]
         context['noticias'] = noticias
         return context
 
 class noticia (models.Model):
+  
     titulo = models.CharField('titulo', max_length=250)
     contenido = models.CharField('contenido', max_length=1000)
+    imagen = models.URLField(blank=True)
+    pie = models.CharField('pie', max_length=500, blank=True)
 
     panels = [
         FieldPanel('titulo'),
-        FieldPanel('contenido')
+        FieldPanel('contenido'),
+        FieldPanel('imagen'),
+        FieldPanel('pie')
 
     ]
     def __str__(self):

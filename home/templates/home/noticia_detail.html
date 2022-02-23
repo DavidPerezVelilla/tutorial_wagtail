@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block content %}
+
+
+<div class="container mt-2"><h2>{{noticia.titulo}}</h2></div>
+<div class="container mt-3">
+<h6>{{noticia.contenido}}</h6>
+<img src="{{noticia.imagen}}" width="100%" >
+</div>
+{% endblock content %}
