@@ -91,21 +91,49 @@ class BlogPageGalleryImage(Orderable):
         FieldPanel('caption'),
     ]
 
+class ViajesTagIndexPage(Page):
+    def get_context(self, request):
+
+        # Filter by tag
+        tag = request.GET.get('tag')
+        viajespage = ViajesPage.objects.filter(tags__name=tag)
+
+        # Update template context
+        context = super().get_context(request)
+        context['viajespage'] = viajespage
+        return context
+
+class ViajesPageTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'ViajesPage',
+        related_name='tagged_items',
+        on_delete=models.CASCADE
+    )
+
 class ViajesPage(Page):
     fecha = models.DateField("Fecha Post")
     intro = models.CharField("Introducción", max_length=250)
     cuerpo = RichTextField(blank=True)
-   
+    tags = ClusterTaggableManager(through=ViajesPageTag, blank=True)
+    categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
     
-
-
-  
     content_panels = Page.content_panels + [
+         MultiFieldPanel([
+            FieldPanel('tags'),
+            FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
+            ],
+            heading='Información'
+        ),
      
         FieldPanel('intro'),
         FieldPanel('cuerpo', classname="full"),
         FieldPanel('fecha')
         
+    ]
+
+    search_fields = Page.search_fields + [
+        index.SearchField('intro'),
+        index.SearchField('cuerpo'),
     ]
 
 @register_snippet
