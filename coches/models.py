@@ -37,6 +37,7 @@ class Coche(models.Model):
         verbose_name_plural = 'Coches'
         
 
+
 class CochesIndexPage(Page):
     introduccion = RichTextField(blank=True)
 
@@ -44,10 +45,10 @@ class CochesIndexPage(Page):
         FieldPanel('introduccion', classname="full")
     ]
 
-    def paginate(self, request, Coche, *args):
+    def paginate(self, request, coches, *args):
         page = request.GET.get('page')
         
-        paginator = Paginator(Coche, 15)
+        paginator = Paginator(coches, 15)
         try:
             pages = paginator.page(page)
         except PageNotAnInteger:
@@ -56,6 +57,17 @@ class CochesIndexPage(Page):
             pages = paginator.page(paginator.num_pages)
         return pages
 
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        qs = ''
+        
+        coche = Coche.objects.all()
+
+        context['coches'] = self.paginate(request, coche)
+        context['qs'] = qs
+        
+        return context
     
 
 

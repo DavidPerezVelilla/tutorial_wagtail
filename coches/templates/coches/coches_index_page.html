@@ -6,24 +6,25 @@
 
 {% block content %}
 <div class="container">
-    <h1>{{ page.marca }}</h1>
+    <h1>{{ page.title }}</h1>
 <hr>
 
 <hr>
     <ul class="list-group">
     {% for coche in coches %}
-    <li class="list-group-item">{{coche.marca}}</li>
+    <li class="list-group-item">{{coche.marca}} {{coche.modelo}} ({{coche.year}})</li>
+
     
     {% empty %}
     <p>No hay posts todavía ... </p>
     {% endfor %}
 </ul>
 
-{% if peliculas.paginator.count > 1 %}
+{% if coches.paginator.count > 1 %}
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                {% include "includes/pagination.html" with subpages=peliculas %}
+                {% include "includes/pagination.html" with subpages=coches %}
                 </div>
             </div>
         </div>
