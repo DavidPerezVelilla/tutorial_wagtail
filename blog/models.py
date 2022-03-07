@@ -116,7 +116,8 @@ class ViajesPage(Page):
     cuerpo = RichTextField(blank=True)
     tags = ClusterTaggableManager(through=ViajesPageTag, blank=True)
     categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
-    
+    coordenadas = models.CharField("Coordenadas", max_length=250, blank=True)
+
     content_panels = Page.content_panels + [
          MultiFieldPanel([
             FieldPanel('tags'),
@@ -127,7 +128,8 @@ class ViajesPage(Page):
      
         FieldPanel('intro'),
         FieldPanel('cuerpo', classname="full"),
-        FieldPanel('fecha')
+        FieldPanel('fecha'),
+        FieldPanel('coordenadas'),
         
     ]
 

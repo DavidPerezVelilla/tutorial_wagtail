@@ -4,10 +4,38 @@
 
 {% block body_class %}template-blogpage{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+crossorigin=""/>
+
+<style>
+    #mapa {height: 300px;}
+</style>
+
+{% endblock%}
+
 {% block content %}
+
+
 <div class="container">
     <h1>{{ page.title }}</h1>
     <p class="meta">{{ page.fecha }}</p>
+
+     <!-- Catgegorías-->
+ {% with categories=page.categories.all %}
+ {% if categories %}
+     <h3>Publicado en :</h3>
+     <ul>
+         {% for category in categories %}
+             <li style="display: inline">
+                 {% image category.icon fill-32x32 style="vertical-align: middle" %}
+                 {{ category.name }}
+             </li>
+         {% endfor %}
+     </ul>
+ {% endif %}
+{% endwith %}
 
 
     <div class="intro">{{ page.cuerpo|richtext  }}</div>
@@ -22,7 +50,28 @@
     </div>
     {% endfor %}
     </div>
+
+    <div id="mapa"></div>
     
+    {% block extra_js%}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    
+    <script>
+         var mimapa = L.map('mapa').setView([{{page.coordenadas}}], 13);
+        
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+    maxZoom: 18
+    }).addTo(mimapa)
+    L.marker([{{page.coordenadas}}]).addTo(mimapa).bindPopup();
+   
+    
+    
+    </script>
+    {% endblock%}
+
     {% if page.tags.all.count %}
     <div class="tags">
         <h3>Tags</h3>
