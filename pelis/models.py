@@ -94,7 +94,8 @@ class PelisIndexPage(Page):
         context['qs'] = qs
         
         return context
-
+    subpage_types = []
+       
 
 
     

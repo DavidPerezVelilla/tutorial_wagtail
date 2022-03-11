@@ -28,6 +28,8 @@ class CochesAdmin(ModelAdmin):
     search_fields = ('marca', 'modelo', 'year')
     menu_icon = 'fa-tag'  # change as required
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
+    list_filter = ('marca',)
+    list_display = ('marca', 'modelo', 'year')
 
 
 

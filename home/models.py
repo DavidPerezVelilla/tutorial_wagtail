@@ -1,3 +1,4 @@
+from sqlite3 import Date
 from django.db import models
 
 from wagtail.core.models import Page
@@ -16,6 +17,7 @@ from wagtail.contrib.forms.models import (
     AbstractEmailForm,
     AbstractFormField
 )
+import datetime
 
 
 class HomePage(Page):
@@ -27,9 +29,12 @@ class HomePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        noticias = noticia.objects.all()[:5]
+        noticias = noticia.objects.all().order_by('-date')[:5]
         context['noticias'] = noticias
         return context
+
+    subpage_types = ['blog.BlogIndexPage', 'NoticiaIndexPage', 'ContactPage', 'pelis.PelisIndexPage', 'coches.CochesIndexPage']
+
 
 class noticia (models.Model):
   
@@ -37,12 +42,14 @@ class noticia (models.Model):
     contenido = models.CharField('contenido', max_length=1000)
     imagen = models.URLField(blank=True)
     pie = models.CharField('pie', max_length=500, blank=True)
+    date = models.DateField('Fecha de la noticia',default=datetime.date.today, blank=True)
 
     panels = [
         FieldPanel('titulo'),
         FieldPanel('contenido'),
         FieldPanel('imagen'),
-        FieldPanel('pie')
+        FieldPanel('pie'),
+        FieldPanel('date'),
 
     ]
     def __str__(self):
@@ -59,17 +66,7 @@ class NoticiaIndexPage(Page):
         FieldPanel('introduccion', classname="full")
     ]
 
-    def paginate(self, request, noticia, *args):
-        page = request.GET.get('page')
-        
-        paginator = Paginator(noticia, 15)
-        try:
-            pages = paginator.page(page)
-        except PageNotAnInteger:
-            pages = paginator.page(1)
-        except EmptyPage:
-            pages = paginator.page(paginator.num_pages)
-        return pages
+
 
 class FormField(AbstractFormField):
     page = ParentalKey(
@@ -101,3 +98,5 @@ class ContactPage(AbstractEmailForm):
             FieldPanel("subject"),
         ], heading="Email Settings"),
     ]
+    subpage_types = []
+    

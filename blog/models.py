@@ -30,6 +30,10 @@ class BlogIndexPage(Page):
         
         return context
 
+    subpage_types = ['BlogPage','ViajesPage']
+   
+ 
+
 class BlogTagIndexPage(Page):
     def get_context(self, request):
 
@@ -41,6 +45,7 @@ class BlogTagIndexPage(Page):
         context = super().get_context(request)
         context['blogpages'] = blogpages
         return context
+    subpage_types = []
 
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
@@ -49,6 +54,7 @@ class BlogPageTag(TaggedItemBase):
         on_delete=models.CASCADE
     )
 
+    
 
 class BlogPage(Page):
     date = models.DateField("Fecha Post")
@@ -77,6 +83,8 @@ class BlogPage(Page):
             label="Galería de imágenes"),
     ]
 
+    parent_page_types = ['BlogIndexPage',]
+    subpage_types = []
 class BlogPageGalleryImage(Orderable):
     page = ParentalKey(BlogPage, 
         on_delete=models.CASCADE, 
@@ -137,6 +145,9 @@ class ViajesPage(Page):
         index.SearchField('intro'),
         index.SearchField('cuerpo'),
     ]
+
+    parent_page_types = ['BlogIndexPage',]
+    subpage_types = []
 
 @register_snippet
 class BlogCategory(models.Model):

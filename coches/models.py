@@ -1,4 +1,5 @@
 # Create your models here.
+from multiprocessing import context
 from django.db import models
 
 from wagtail.core.models import Page 
@@ -45,29 +46,18 @@ class CochesIndexPage(Page):
         FieldPanel('introduccion', classname="full")
     ]
 
-    def paginate(self, request, coches, *args):
-        page = request.GET.get('page')
-        
-        paginator = Paginator(coches, 15)
-        try:
-            pages = paginator.page(page)
-        except PageNotAnInteger:
-            pages = paginator.page(1)
-        except EmptyPage:
-            pages = paginator.page(paginator.num_pages)
-        return pages
 
     def get_context(self, request):
         # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
-        qs = ''
+       
         
-        coche = Coche.objects.all()
-
-        context['coches'] = self.paginate(request, coche)
-        context['qs'] = qs
+        coches = Coche.objects.all()
+        context ['coches'] = coches
+       
         
         return context
+    subpage_types = []
     
 
 
