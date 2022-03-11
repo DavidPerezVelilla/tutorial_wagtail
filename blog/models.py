@@ -123,13 +123,13 @@ class ViajesPage(Page):
     intro = models.CharField("Introducción", max_length=250)
     cuerpo = RichTextField(blank=True)
     tags = ClusterTaggableManager(through=ViajesPageTag, blank=True)
-    categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
+    categories = ParentalManyToManyField('blog.ViajesCategory', blank=True)
     coordenadas = models.CharField("Coordenadas", max_length=250, blank=True)
 
     content_panels = Page.content_panels + [
          MultiFieldPanel([
             FieldPanel('tags'),
-            FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
+            
             ],
             heading='Información'
         ),
@@ -168,3 +168,23 @@ class BlogCategory(models.Model):
     class Meta:
         verbose_name_plural = 'categorías de blog'
         verbose_name = 'categoría de blog'
+
+@register_snippet
+class ViajesCategory(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='+'
+    )
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('icon'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'categorías de viajes'
+        verbose_name = 'categoría de viajes'

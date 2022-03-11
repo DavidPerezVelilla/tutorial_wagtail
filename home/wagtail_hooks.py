@@ -26,7 +26,7 @@ class NoticiaAdmin(ModelAdmin):
     search_fields = ('titulo')
     menu_icon = 'fa-tags'  # change as required
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
-
+    list_display = ('titulo', 'date')
 
 
 class NoticiaAdminGroup(ModelAdminGroup):
